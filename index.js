@@ -15,7 +15,7 @@ var nodemailer = require('nodemailer');
 
 
 const app = express();
-// const PORT = process.env.PORT || 4100;
+const PORT = process.env.PORT || 4100;
 const mongo_uri = process.env.MONGO_URI;
 const saltRounds = 12;
 
@@ -272,6 +272,7 @@ app.get('/everything', async (req, res, next) => {
 app.get('/memes', async (req, res, next) => {
     try {
         const url = process.env.COMIC_URL_2
+        res.send(url);
         // const body = await axios.get(result)
         const body = req.query.query === '' ? 
                 await axios.get(`${url}1000`)
