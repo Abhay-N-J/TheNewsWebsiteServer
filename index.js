@@ -20,7 +20,8 @@ const mongo_uri = process.env.MONGO_URI;
 const saltRounds = 12;
 
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(cors({ origin: "http://localhost:3000" }));
+// app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors());
 
 app.post('/login', async (req, res, next) => {
     // console.log(req.body);
