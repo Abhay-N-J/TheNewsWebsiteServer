@@ -15,7 +15,7 @@ var nodemailer = require('nodemailer');
 
 
 const app = express();
-const PORT = process.env.PORT || 4100;
+// const PORT = process.env.PORT || 4100;
 const mongo_uri = process.env.MONGO_URI;
 const saltRounds = 12;
 
