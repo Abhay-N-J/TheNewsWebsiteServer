@@ -272,10 +272,10 @@ app.get('/everything', async (req, res, next) => {
 app.get('/memes', async (req, res, next) => {
     try {
         const url = process.env.COMIC_URL_2
-        res.send(url);
+        // res.send(url);
         // const body = await axios.get(result)
         const body = req.query.query === '' ? 
-                await axios.get(`${url}1000`)
+                await axios.get(`${url}`)
                 : await axios.get(`${url}${req.query.query}/100`)
         // const body = await axios.get('https://api.humorapi.com/memes/search?api-key=e1b16e2f50c040408d39d6a371b31395&number=10&offset=2')
         console.log(body);
