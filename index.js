@@ -10,6 +10,7 @@ const NewsAPI = require('newsapi');
 // const url = require('url');
 require('dotenv').config({path:'./.env'});
 var nodemailer = require('nodemailer');
+const { getMeme } = require('@arifszn/meme-js');
 
 
 
@@ -276,25 +277,55 @@ app.get('/everything', async (req, res, next) => {
 
 app.get('/memes', async (req, res, next) => {
     try {
-        const url = process.env.COMIC_URL_2
-        // res.send(url);
-        // const body = await axios.get(result)
-        const body = req.query.query === '' ? 
-        await axios.get(`${url}1000`)
-        : await axios.get(`${url}${req.query.query}/1000`)
-        console.log(body);
-        // const body = await axios.get('https://api.humorapi.com/memes/search?api-key=e1b16e2f50c040408d39d6a371b31395&number=10&offset=2')
-        if(!body || body?.data?.count <= 0) next(new Error("Page Not found"))
-        else {
-            // data = body?.data?.memes
-            // console.log(data);
-            data = body?.data?.memes
-            res.send({
-                error:false,
-                body:data,
-                totalResults:body.count
-            }).end()
-        }
+        // const url = process.env.COMIC_URL_2
+        // // res.send(url);
+        // // const body = await axios.get(result)
+        // const body = req.query.query === '' ? 
+        //     await axios.get(`${url}1000`)
+        //     : await axios.get(`${url}${req.query.query}/1000`)
+        // console.log(body);
+        // // const body = await axios.get('https://api.humorapi.com/memes/search?api-key=e1b16e2f50c040408d39d6a371b31395&number=10&offset=2')
+        // if(!body || body?.data?.count <= 0) next(new Error("Page Not found"))
+        // else {
+        //     // data = body?.data?.memes
+        //     // console.log(data);
+        //     data = body?.data?.memes
+        //     res.send({
+        //         error:false,
+        //         body:data,
+        //         totalResults:body.count
+        //     }).end()
+        // const Reddit = require('reddit')
+ 
+        // const reddit = new Reddit({
+        // appId: process.env.REDDIT_ID,
+        // password: 'TODO',
+        // username: 'TODO',
+        // appSecret: process.env.REDDIT_SECRET,
+        // userAgent: 'Webtech:com'
+        // })
+        
+        // // Submit a link to the /r/BitMidi subreddit
+        // const res = await reddit.post('/api/submit', {
+        // sr: 'WeAreTheMusicMakers',
+        // kind: 'link',
+        // resubmit: true,
+        // title: 'BitMidi – 100K+ Free MIDI files',
+        // url: 'https://bitmidi.com'
+        // })
+        
+        // console.log(res)
+        // // }
+        getMeme({
+        total: 20,
+        }).then((result) => {
+        // console.log(result);
+        res.send({
+            error:false,
+            body:result,
+            totalResults:result.length
+        })
+        });
     } catch(err) {
         next(err)
     }
