@@ -355,6 +355,7 @@ app.get('/sources', async (req, res, next) => {
 
 app.use((err, req, res, next) => {
     // console.error(err.stack)
+    console.log(err.toString());
     res.send({error:err.toString(),token:false}).end()
 })
 
