@@ -325,7 +325,14 @@ app.get('/memes', async (req, res, next) => {
             body:result,
             totalResults:result.length
         })
-        });
+        })
+        .then(err => {
+            console.log(err.toString());
+        })
+        .catch(err => {
+            console.log(err.toString());
+
+        })
     } catch(err) {
         next(err)
     }
