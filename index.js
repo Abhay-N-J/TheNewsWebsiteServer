@@ -199,10 +199,10 @@ app.get('/collection', async (req, res, next) => {
         const db = client.db('Project')
         const user = await db.collection('logins').findOne({_id:ObjectId(req.query.userid)})
         let data = await db.collection('data').findOne({user: user?.user})
+        console.log(data);
         data = data?.data
         let length = data?.length
-        data = data.slice( (req.query.page - 1)*20, (req.query.page) *20 )
-        // console.log(data);
+        data = data?.slice( (req.query.page - 1)*20, (req.query.page) *20 )
         res.send({
             body:data,
             error:false,
