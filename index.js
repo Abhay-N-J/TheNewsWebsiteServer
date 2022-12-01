@@ -76,15 +76,16 @@ app.post('/signup', (req, res, next) => {
     .then(async credentials => {
         const db = client.db('Project');
         // console.log("L");
-        const result = await db.collection('logins').findOne({email:credentials.email})
+        let result = await db.collection('logins').findOne({email:credentials.email})
+        console.log(result);
         if(result) {
             next(new Error('Email already exists'))
         }
-        else if( await db.collection('logins').findOne({user:credentials.user})) {
-            next(new Error('User already exists'))
-        }
-        else {
-            db.collection('logins').insertOne(credentials)
+        else { 
+            result =  await db.collection('logins').findOne({user:credentials.user})
+            if(result) next(new Error('User already exists'))
+            else {
+                db.collection('logins').insertOne(credentials)
             .catch(err => console.log(err.toString()))
             // console.log(data);
             // req.body = JSON.parse(req.body)
@@ -92,10 +93,13 @@ app.post('/signup', (req, res, next) => {
             // res.send({token:req.body.user})
             // res.send({token:data.passwd === credentials.passwd})
             res.end({
-                error:false
+                error:false,
+                
             }.toString())
+            }
         }
-        client.close()
+        
+        // client.close()
     })
     .catch(err => { 
         // console.log(err.toString());
