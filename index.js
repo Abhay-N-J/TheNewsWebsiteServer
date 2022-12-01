@@ -94,7 +94,6 @@ app.post('/signup', (req, res, next) => {
             // res.send({token:data.passwd === credentials.passwd})
             res.end({
                 error:false,
-                
             }.toString())
             }
         }
@@ -201,7 +200,7 @@ app.get('/collection', async (req, res, next) => {
         const user = await db.collection('logins').findOne({_id:ObjectId(req.query.userid)})
         let data = await db.collection('data').findOne({user: user?.user})
         data = data?.data
-        let length = data.length
+        let length = data?.length
         data = data.slice( (req.query.page - 1)*20, (req.query.page) *20 )
         // console.log(data);
         res.send({
