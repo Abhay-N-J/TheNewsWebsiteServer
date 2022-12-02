@@ -193,6 +193,53 @@ app.post('/save', async (req, res, next) => {
     }
 })
 
+app.put('/delete', async (req, res, next) => {
+    try {
+        const client = new MongoClient(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+        const db = client.db('Project')
+        const body = {
+            title:req.body.title,
+            url_image:req.body.url_image,
+            url:req.body.url,
+            description:req.body.description,
+            content:req.body.content
+        }
+        const user = await db.collection('logins').findOne({_id:ObjectId(req.body.user)})
+        const data = await db.collection('data').findOne({user: user?.user})
+        // console.log(body);
+        let flag = false
+        for (i in data?.data ){
+            if(isEqualsJson(data?.data[i], body))
+                flag = true
+        }
+        if(!flag) next(new Error("Not in Collection"))
+        else {
+            // const response = await db.collection('data').deleteOne(
+            //     {user: user?.user},
+            //     { $push: { data : body } },
+            //     { upsert: true}
+            // )
+            // console.log(data);
+            data?.data.splice(data?.data?.indexOf(body,1))
+            const response = await db.collection('data').updateOne(
+                {user: user?.user},
+                { $set: { data: data?.data } },
+                { upsert: true}
+            )
+            // console.log(response);
+            if(!response.acknowledged) next(new Error("Could not delete"))
+            else 
+                res.send({
+                    error: false,
+                    message: "Deleted"
+                }).end()
+        }
+        client.close()
+    } catch(err) {
+        next(err)
+    }
+})
+
 app.get('/collection', async (req, res, next) => {
     try {
         const client = new MongoClient(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
